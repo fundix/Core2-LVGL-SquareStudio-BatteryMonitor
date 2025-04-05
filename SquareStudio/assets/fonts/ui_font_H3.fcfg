@@ -1,0 +1,16 @@
+{
+  "codename": "H3",
+  "ttf_path": "/assets/fonts/Nexa Light.otf",
+  "bin_path": "/assets/fonts/ui_font_H3.bin",
+  "c_path": "/assets/fonts/ui_font_H3.c",
+  "cfg_path": "/assets/fonts/ui_font_H3.fcfg",
+  "size": 18,
+  "bpp": 2,
+  "letters": 0,
+  "ranges": [
+    "0x20-0x7f"
+  ],
+  "symbols": "",
+  "customparams": "--no-compress --no-prefilter",
+  "uploaded": false
+}

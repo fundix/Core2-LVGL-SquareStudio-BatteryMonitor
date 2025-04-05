@@ -12,6 +12,30 @@
 void ui_Screen1_screen_init(void);
 lv_obj_t *ui_Screen1;
 lv_obj_t *ui_Label1;
+lv_obj_t *ui_StatusBar;
+lv_obj_t *ui_Clock;
+lv_obj_t *ui_ClockLabel;
+lv_obj_t *ui_BatOuter;
+lv_obj_t *ui_ScreenMain_Bat;
+lv_obj_t *ui_Battery;
+lv_obj_t *ui_ScreenMain_ContainerBatt;
+lv_obj_t *ui_ScreenMain_Charging;
+lv_obj_t *ui_ScreenMain_Label3;
+lv_obj_t *ui_ScreenMain_Label4;
+lv_obj_t *ui_Container1;
+lv_obj_t *ui_Container_Voltage;
+lv_obj_t *ui_Label4;
+lv_obj_t *ui_Label_Voltage;
+lv_obj_t *ui_Label5;
+void ui_event_Container_Capacity( lv_event_t * e);
+lv_obj_t *ui_Container_Capacity;
+lv_obj_t *ui_Label6;
+lv_obj_t *ui_Label_Capacity;
+lv_obj_t *ui_Label7;
+lv_obj_t *ui_Container_Power;
+lv_obj_t *ui_Label3;
+lv_obj_t *ui_Label_Power;
+lv_obj_t *ui_Label2;
 // CUSTOM VARIABLES
 
 // EVENTS
@@ -27,6 +51,13 @@ lv_obj_t *ui____initial_actions0;
 ///////////////////// ANIMATIONS ////////////////////
 
 ///////////////////// FUNCTIONS ////////////////////
+void ui_event_Container_Capacity( lv_event_t * e) {
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+if ( event_code == LV_EVENT_CLICKED) {
+      CapacityClicked( e );
+}
+}
 
 ///////////////////// SCREENS ////////////////////
 

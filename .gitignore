@@ -32,3 +32,5 @@
 *.app
 SquareStudio/autosave
 SquareStudio/backup
+Platformio/.vscode
+.DS_Store

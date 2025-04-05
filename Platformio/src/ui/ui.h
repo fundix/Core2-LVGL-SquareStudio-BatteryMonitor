@@ -29,13 +29,38 @@ extern "C" {
 void ui_Screen1_screen_init(void);
 extern lv_obj_t *ui_Screen1;
 extern lv_obj_t *ui_Label1;
+extern lv_obj_t *ui_StatusBar;
+extern lv_obj_t *ui_Clock;
+extern lv_obj_t *ui_ClockLabel;
+extern lv_obj_t *ui_BatOuter;
+extern lv_obj_t *ui_ScreenMain_Bat;
+extern lv_obj_t *ui_Battery;
+extern lv_obj_t *ui_ScreenMain_ContainerBatt;
+extern lv_obj_t *ui_ScreenMain_Charging;
+extern lv_obj_t *ui_ScreenMain_Label3;
+extern lv_obj_t *ui_ScreenMain_Label4;
+extern lv_obj_t *ui_Container1;
+extern lv_obj_t *ui_Container_Voltage;
+extern lv_obj_t *ui_Label4;
+extern lv_obj_t *ui_Label_Voltage;
+extern lv_obj_t *ui_Label5;
+void ui_event_Container_Capacity( lv_event_t * e);
+extern lv_obj_t *ui_Container_Capacity;
+extern lv_obj_t *ui_Label6;
+extern lv_obj_t *ui_Label_Capacity;
+extern lv_obj_t *ui_Label7;
+extern lv_obj_t *ui_Container_Power;
+extern lv_obj_t *ui_Label3;
+extern lv_obj_t *ui_Label_Power;
+extern lv_obj_t *ui_Label2;
 // CUSTOM VARIABLES
 
 // EVENTS
 extern lv_obj_t *ui____initial_actions0;
 
 // FONTS
-LV_FONT_DECLARE( ui_font_clock_66);
+LV_FONT_DECLARE( ui_font_H1);
+LV_FONT_DECLARE( ui_font_H3);
 
 // UI INIT
 void ui_init(void);
