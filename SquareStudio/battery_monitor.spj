@@ -2757,7 +2757,7 @@
                       {
                         "nid": 1030,
                         "strtype": "LABEL/Text",
-                        "strval": "capacity",
+                        "strval": "current",
                         "InheritedType": 10
                       },
                       {
@@ -3077,7 +3077,7 @@
                       {
                         "nid": 1030,
                         "strtype": "LABEL/Text",
-                        "strval": "mAh",
+                        "strval": "mA",
                         "InheritedType": 10
                       },
                       {
@@ -4833,7 +4833,7 @@
     "uiExportFolderPath": "/Users/karelfunda/Projects/Core2-LVGL-SquareStudio-BatteryMonitor/Platformio/src/ui",
     "projectExportFolderPath": "/Users/karelfunda/Projects/Core2-LVGL-SquareStudio-BatteryMonitor/Platformio/src/ui",
     "custom_variable_prefix": "uic",
-    "backup_cnt": 381,
+    "backup_cnt": 569,
     "autosave_cnt": 0,
     "group_color_cnt": 0,
     "lvgl_version": "9.1.0",

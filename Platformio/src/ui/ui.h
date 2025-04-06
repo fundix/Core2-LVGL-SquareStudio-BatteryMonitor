@@ -53,6 +53,10 @@ extern lv_obj_t *ui_Container_Power;
 extern lv_obj_t *ui_Label3;
 extern lv_obj_t *ui_Label_Power;
 extern lv_obj_t *ui_Label2;
+extern lv_obj_t *ui_Chart1;
+extern lv_obj_t *ui_Chart1_Xaxis;
+extern lv_obj_t *ui_Chart1_Yaxis1;
+extern lv_obj_t *ui_Chart1_Yaxis2;
 // CUSTOM VARIABLES
 
 // EVENTS

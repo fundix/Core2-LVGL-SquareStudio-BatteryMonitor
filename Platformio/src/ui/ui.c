@@ -36,6 +36,10 @@ lv_obj_t *ui_Container_Power;
 lv_obj_t *ui_Label3;
 lv_obj_t *ui_Label_Power;
 lv_obj_t *ui_Label2;
+lv_obj_t *ui_Chart1;
+lv_obj_t *ui_Chart1_Xaxis;
+lv_obj_t *ui_Chart1_Yaxis1;
+lv_obj_t *ui_Chart1_Yaxis2;
 // CUSTOM VARIABLES
 
 // EVENTS
