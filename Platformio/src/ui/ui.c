@@ -13,6 +13,9 @@ void ui_Screen1_screen_init(void);
 lv_obj_t *ui_Screen1;
 lv_obj_t *ui_Label1;
 lv_obj_t *ui_StatusBar;
+lv_obj_t *ui_TempContainer;
+lv_obj_t *ui_Label_Temperature;
+lv_obj_t *ui_Label15;
 lv_obj_t *ui_Clock;
 lv_obj_t *ui_ClockLabel;
 lv_obj_t *ui_BatOuter;
@@ -23,23 +26,38 @@ lv_obj_t *ui_ScreenMain_Charging;
 lv_obj_t *ui_ScreenMain_Label3;
 lv_obj_t *ui_ScreenMain_Label4;
 lv_obj_t *ui_Container1;
+void ui_event_Container_Voltage( lv_event_t * e);
 lv_obj_t *ui_Container_Voltage;
 lv_obj_t *ui_Label4;
-lv_obj_t *ui_Label_Voltage;
+lv_obj_t *ui_Label_Capacity;
 lv_obj_t *ui_Label5;
 void ui_event_Container_Capacity( lv_event_t * e);
 lv_obj_t *ui_Container_Capacity;
 lv_obj_t *ui_Label6;
-lv_obj_t *ui_Label_Capacity;
+lv_obj_t *ui_Label_Max_current;
 lv_obj_t *ui_Label7;
+void ui_event_Container_Power( lv_event_t * e);
 lv_obj_t *ui_Container_Power;
 lv_obj_t *ui_Label3;
-lv_obj_t *ui_Label_Power;
+lv_obj_t *ui_Label_Max_Power;
 lv_obj_t *ui_Label2;
-lv_obj_t *ui_Chart1;
-lv_obj_t *ui_Chart1_Xaxis;
-lv_obj_t *ui_Chart1_Yaxis1;
-lv_obj_t *ui_Chart1_Yaxis2;
+lv_obj_t *ui_Container2;
+void ui_event_Container_Voltage1( lv_event_t * e);
+lv_obj_t *ui_Container_Voltage1;
+lv_obj_t *ui_Label8;
+lv_obj_t *ui_Label_Voltage;
+lv_obj_t *ui_Label9;
+lv_obj_t *ui_Container3;
+lv_obj_t *ui_Label_Max_Voltage;
+lv_obj_t *ui_Label_Max_Voltage1;
+lv_obj_t *ui_Container_Capacity1;
+lv_obj_t *ui_Label10;
+lv_obj_t *ui_Label_Current;
+lv_obj_t *ui_Label11;
+lv_obj_t *ui_Container_Power1;
+lv_obj_t *ui_Label12;
+lv_obj_t *ui_Label_Power;
+lv_obj_t *ui_Label13;
 // CUSTOM VARIABLES
 
 // EVENTS
@@ -55,11 +73,35 @@ lv_obj_t *ui____initial_actions0;
 ///////////////////// ANIMATIONS ////////////////////
 
 ///////////////////// FUNCTIONS ////////////////////
+void ui_event_Container_Voltage( lv_event_t * e) {
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+if ( event_code == LV_EVENT_LONG_PRESSED) {
+      CapacityClicked( e );
+}
+}
+
 void ui_event_Container_Capacity( lv_event_t * e) {
     lv_event_code_t event_code = lv_event_get_code(e);
 
-if ( event_code == LV_EVENT_CLICKED) {
-      CapacityClicked( e );
+if ( event_code == LV_EVENT_LONG_PRESSED) {
+      CurrentClicked( e );
+}
+}
+
+void ui_event_Container_Power( lv_event_t * e) {
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+if ( event_code == LV_EVENT_LONG_PRESSED) {
+      PowerClicked( e );
+}
+}
+
+void ui_event_Container_Voltage1( lv_event_t * e) {
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+if ( event_code == LV_EVENT_LONG_PRESSED) {
+      VoltageClicked( e );
 }
 }
 

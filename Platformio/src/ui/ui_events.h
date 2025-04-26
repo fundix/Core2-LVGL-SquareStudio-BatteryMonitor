@@ -11,6 +11,9 @@ extern "C" {
 #endif
 
 void CapacityClicked(lv_event_t * e);
+void CurrentClicked(lv_event_t * e);
+void PowerClicked(lv_event_t * e);
+void VoltageClicked(lv_event_t * e);
 
 #ifdef __cplusplus
 } /*extern "C"*/
