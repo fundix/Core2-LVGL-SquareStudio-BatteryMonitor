@@ -260,7 +260,7 @@ ui_Label_Capacity = lv_label_create(ui_Container_Voltage);
 lv_obj_set_width( ui_Label_Capacity, LV_SIZE_CONTENT);  /// 1
 lv_obj_set_height( ui_Label_Capacity, LV_SIZE_CONTENT);   /// 1
 lv_obj_set_align( ui_Label_Capacity, LV_ALIGN_CENTER );
-lv_label_set_text(ui_Label_Capacity,"12.5");
+lv_label_set_text(ui_Label_Capacity,"00.0");
 lv_obj_set_style_text_color(ui_Label_Capacity, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_text_opa(ui_Label_Capacity, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 
@@ -320,7 +320,7 @@ ui_Label_Max_current = lv_label_create(ui_Container_Capacity);
 lv_obj_set_width( ui_Label_Max_current, LV_SIZE_CONTENT);  /// 1
 lv_obj_set_height( ui_Label_Max_current, LV_SIZE_CONTENT);   /// 1
 lv_obj_set_align( ui_Label_Max_current, LV_ALIGN_CENTER );
-lv_label_set_text(ui_Label_Max_current,"1205");
+lv_label_set_text(ui_Label_Max_current,"0000");
 lv_obj_set_style_text_color(ui_Label_Max_current, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_text_opa(ui_Label_Max_current, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 
@@ -380,7 +380,7 @@ ui_Label_Max_Power = lv_label_create(ui_Container_Power);
 lv_obj_set_width( ui_Label_Max_Power, LV_SIZE_CONTENT);  /// 1
 lv_obj_set_height( ui_Label_Max_Power, LV_SIZE_CONTENT);   /// 1
 lv_obj_set_align( ui_Label_Max_Power, LV_ALIGN_CENTER );
-lv_label_set_text(ui_Label_Max_Power,"99.5");
+lv_label_set_text(ui_Label_Max_Power,"00.0");
 lv_obj_set_style_text_color(ui_Label_Max_Power, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_text_opa(ui_Label_Max_Power, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 
@@ -457,7 +457,7 @@ ui_Label_Voltage = lv_label_create(ui_Container_Voltage1);
 lv_obj_set_width( ui_Label_Voltage, LV_SIZE_CONTENT);  /// 1
 lv_obj_set_height( ui_Label_Voltage, LV_SIZE_CONTENT);   /// 1
 lv_obj_set_align( ui_Label_Voltage, LV_ALIGN_CENTER );
-lv_label_set_text(ui_Label_Voltage,"12.5");
+lv_label_set_text(ui_Label_Voltage,"00.0");
 lv_obj_set_style_text_color(ui_Label_Voltage, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_text_opa(ui_Label_Voltage, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 
@@ -490,7 +490,7 @@ lv_obj_set_width( ui_Label_Max_Voltage, LV_SIZE_CONTENT);  /// 1
 lv_obj_set_height( ui_Label_Max_Voltage, LV_SIZE_CONTENT);   /// 1
 lv_obj_set_x( ui_Label_Max_Voltage, 4 );
 lv_obj_set_y( ui_Label_Max_Voltage, -32 );
-lv_label_set_text(ui_Label_Max_Voltage,"12.5");
+lv_label_set_text(ui_Label_Max_Voltage,"00.0");
 lv_obj_set_style_text_color(ui_Label_Max_Voltage, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_text_opa(ui_Label_Max_Voltage, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_text_font(ui_Label_Max_Voltage, &lv_font_montserrat_14, LV_PART_MAIN| LV_STATE_DEFAULT);
@@ -554,7 +554,7 @@ ui_Label_Current = lv_label_create(ui_Container_Capacity1);
 lv_obj_set_width( ui_Label_Current, LV_SIZE_CONTENT);  /// 1
 lv_obj_set_height( ui_Label_Current, LV_SIZE_CONTENT);   /// 1
 lv_obj_set_align( ui_Label_Current, LV_ALIGN_CENTER );
-lv_label_set_text(ui_Label_Current,"1205");
+lv_label_set_text(ui_Label_Current,"0000");
 lv_obj_set_style_text_color(ui_Label_Current, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_text_opa(ui_Label_Current, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 
@@ -614,7 +614,7 @@ ui_Label_Power = lv_label_create(ui_Container_Power1);
 lv_obj_set_width( ui_Label_Power, LV_SIZE_CONTENT);  /// 1
 lv_obj_set_height( ui_Label_Power, LV_SIZE_CONTENT);   /// 1
 lv_obj_set_align( ui_Label_Power, LV_ALIGN_CENTER );
-lv_label_set_text(ui_Label_Power,"99.5");
+lv_label_set_text(ui_Label_Power,"00.0");
 lv_obj_set_style_text_color(ui_Label_Power, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_text_opa(ui_Label_Power, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 

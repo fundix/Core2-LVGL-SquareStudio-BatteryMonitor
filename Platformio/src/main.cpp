@@ -265,7 +265,7 @@ void loop()
     snprintf(power_str, sizeof(power_str), "%.2f", power_mW / 1000.0);
     snprintf(current_str, sizeof(current_str), "%.0f", current_mA);
     snprintf(max_current_str, sizeof(max_current_str), "%.0f", max_current_mA);
-    snprintf(max_power_str, sizeof(max_power_str), "%.0f", max_power_mW / 1000.0);
+    snprintf(max_power_str, sizeof(max_power_str), "%.1f", max_power_mW / 1000.0);
     snprintf(max_busvoltage_str, sizeof(max_busvoltage_str), "%.1f", max_busvoltage);
     snprintf(capacity_str, sizeof(capacity_str), "%.1f", capacity);
     snprintf(temp_str, sizeof(temp_str), "%.1f", temp);

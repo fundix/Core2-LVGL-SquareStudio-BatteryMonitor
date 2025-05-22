@@ -2698,7 +2698,7 @@
                       {
                         "nid": 1030,
                         "strtype": "LABEL/Text",
-                        "strval": "12.5",
+                        "strval": "00.0",
                         "InheritedType": 10
                       },
                       {
@@ -3470,7 +3470,7 @@
                       {
                         "nid": 1030,
                         "strtype": "LABEL/Text",
-                        "strval": "1205",
+                        "strval": "0000",
                         "InheritedType": 10
                       },
                       {
@@ -4242,7 +4242,7 @@
                       {
                         "nid": 1030,
                         "strtype": "LABEL/Text",
-                        "strval": "99.5",
+                        "strval": "00.0",
                         "InheritedType": 10
                       },
                       {
@@ -5179,7 +5179,7 @@
                       {
                         "nid": 1030,
                         "strtype": "LABEL/Text",
-                        "strval": "12.5",
+                        "strval": "00.0",
                         "InheritedType": 10
                       },
                       {
@@ -5443,6 +5443,7 @@
                           },
                           {
                             "nid": 90,
+                            "flags": 1048576,
                             "strtype": "OBJECT/Flags",
                             "InheritedType": 1
                           },
@@ -5502,7 +5503,7 @@
                           {
                             "nid": 1030,
                             "strtype": "LABEL/Text",
-                            "strval": "12.5",
+                            "strval": "00.0",
                             "InheritedType": 10
                           },
                           {
@@ -6446,7 +6447,7 @@
                       {
                         "nid": 1030,
                         "strtype": "LABEL/Text",
-                        "strval": "1205",
+                        "strval": "0000",
                         "InheritedType": 10
                       },
                       {
@@ -7153,7 +7154,7 @@
                       {
                         "nid": 1030,
                         "strtype": "LABEL/Text",
-                        "strval": "99.5",
+                        "strval": "00.0",
                         "InheritedType": 10
                       },
                       {
