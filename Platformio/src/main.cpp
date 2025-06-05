@@ -21,6 +21,14 @@ static const char *TAG = "main";
 #include <lvgl.h>
 #include <esp_timer.h>
 
+#define HALL_ANALOG GPIO_NUM_26
+#define HALL_DIGITAL GPIO_NUM_36
+
+volatile uint32_t hall_pulse_count = 0;
+uint32_t last_rpm = 0;
+portMUX_TYPE hallMux = portMUX_INITIALIZER_UNLOCKED;
+volatile uint32_t last_pulse_time = 0;
+
 #include <Adafruit_INA228.h>
 Adafruit_INA228 ina228 = Adafruit_INA228();
 float shuntvoltage = 0;
@@ -43,10 +51,13 @@ extern lv_obj_t *ui_Chart1;
 constexpr int32_t HOR_RES = 320;
 constexpr int32_t VER_RES = 240;
 
-#define SLEEP_TIME 120000
-static int16_t stored_brightness = 127;
+#define SLEEP_TIME 240000
+static int16_t stored_brightness = 255;
 static bool is_dimmed = false;
 static TimerHandle_t displayTimer = NULL;
+
+volatile bool beep_now = false;
+static TimerHandle_t rpmTimer = NULL;
 
 lv_display_t *display;
 lv_indev_t *indev;
@@ -56,6 +67,52 @@ void beep2();
 void click();
 void updateBattery();
 void setupDisplayTimer();
+void rpmUpdateTimerCallback(TimerHandle_t xTimer);
+void setupRpmTimer();
+void updateRpmLabel(void *rpm_val);
+
+void updateRpmLabel(void *rpm_val)
+{
+  char rpm_str[16];
+  snprintf(rpm_str, sizeof(rpm_str), "%u", (uint32_t)(uintptr_t)rpm_val);
+  lv_label_set_text(ui_LabelRPM, rpm_str);
+
+  int32_t arc_value = (int32_t)(uintptr_t)rpm_val;
+  if (arc_value > 2000)
+    arc_value = 2000;
+  lv_arc_set_value(ui_Arc1, arc_value);
+}
+
+void setupRpmTimer()
+{
+  rpmTimer = xTimerCreate(
+      "RPMTimer",
+      pdMS_TO_TICKS(1000),
+      pdTRUE,
+      (void *)0,
+      rpmUpdateTimerCallback);
+
+  if (rpmTimer != NULL)
+  {
+    xTimerStart(rpmTimer, 0);
+  }
+}
+
+void rpmUpdateTimerCallback(TimerHandle_t xTimer)
+{
+  uint32_t pulse_count = hall_pulse_count;
+  hall_pulse_count = 0;
+  static uint32_t rpm_history[3] = {0};
+  static uint8_t rpm_index = 0;
+
+  rpm_history[rpm_index] = pulse_count * 60;
+  rpm_index = (rpm_index + 1) % 3;
+
+  last_rpm = (rpm_history[0] + rpm_history[1] + rpm_history[2]) / 3;
+
+  // Zavolá bezpečně aktualizaci labelu v hlavním vlákně
+  lv_async_call(updateRpmLabel, (void *)(uintptr_t)last_rpm);
+}
 
 void my_display_flush(lv_display_t *disp, const lv_area_t *area, uint8_t *px_map)
 {
@@ -125,89 +182,110 @@ void setup()
 
   lv_indev_set_read_cb(indev, my_touchpad_read);
 
+  // Set up analog pin
+  pinMode(HALL_ANALOG, INPUT);
+  analogReadResolution(12);
+
+  // Set up digital pin as interrupt
+  pinMode(HALL_DIGITAL, INPUT_PULLUP);
+  attachInterrupt(HALL_DIGITAL, []()
+                  {
+    uint32_t now = millis();
+
+    portENTER_CRITICAL_ISR(&hallMux);
+    if (now - last_pulse_time > 10)
+    {
+      last_pulse_time = now;
+      hall_pulse_count++;
+      beep_now = true;
+    }
+    portEXIT_CRITICAL_ISR(&hallMux); }, FALLING); // Změna z FALLING na RISING
+
+  setupRpmTimer();
+
   // Wire.end();
-  if (!ina228.begin())
-  {
-    ESP_LOGE(TAG, "Failed to find INA228 chip");
-  }
-  else
-  {
-    ina_inicialized = true;
-    ESP_LOGI(TAG, "INA228 chip found");
-  }
+  // if (!ina228.begin())
+  // {
+  //   ESP_LOGE(TAG, "Failed to find INA228 chip");
+  // }
+  // else
+  // {
+  //   ina_inicialized = true;
+  //   ESP_LOGI(TAG, "INA228 chip found");
+  // }
 
-  if (ina_inicialized)
-  {
-    ina228.setShunt(0.015, 10.0);
+  // if (ina_inicialized)
+  // {
+  //   ina228.setShunt(0.015, 10.0);
 
-    ina228.setAveragingCount(INA228_COUNT_16);
-    uint16_t counts[] = {1, 4, 16, 64, 128, 256, 512, 1024};
-    Serial.print("Averaging counts: ");
-    Serial.println(counts[ina228.getAveragingCount()]);
+  //   ina228.setAveragingCount(INA228_COUNT_16);
+  //   uint16_t counts[] = {1, 4, 16, 64, 128, 256, 512, 1024};
+  //   Serial.print("Averaging counts: ");
+  //   Serial.println(counts[ina228.getAveragingCount()]);
 
-    // set the time over which to measure the current and bus voltage
-    ina228.setVoltageConversionTime(INA228_TIME_540_us);
-    Serial.print("Voltage conversion time: ");
-    switch (ina228.getVoltageConversionTime())
-    {
-    case INA228_TIME_50_us:
-      Serial.print("50");
-      break;
-    case INA228_TIME_84_us:
-      Serial.print("84");
-      break;
-    case INA228_TIME_150_us:
-      Serial.print("150");
-      break;
-    case INA228_TIME_280_us:
-      Serial.print("280");
-      break;
-    case INA228_TIME_540_us:
-      Serial.print("540");
-      break;
-    case INA228_TIME_1052_us:
-      Serial.print("1052");
-      break;
-    case INA228_TIME_2074_us:
-      Serial.print("2074");
-      break;
-    case INA228_TIME_4120_us:
-      Serial.print("4120");
-      break;
-    }
-    Serial.println(" uS");
+  //   // set the time over which to measure the current and bus voltage
+  //   ina228.setVoltageConversionTime(INA228_TIME_540_us);
+  //   Serial.print("Voltage conversion time: ");
+  //   switch (ina228.getVoltageConversionTime())
+  //   {
+  //   case INA228_TIME_50_us:
+  //     Serial.print("50");
+  //     break;
+  //   case INA228_TIME_84_us:
+  //     Serial.print("84");
+  //     break;
+  //   case INA228_TIME_150_us:
+  //     Serial.print("150");
+  //     break;
+  //   case INA228_TIME_280_us:
+  //     Serial.print("280");
+  //     break;
+  //   case INA228_TIME_540_us:
+  //     Serial.print("540");
+  //     break;
+  //   case INA228_TIME_1052_us:
+  //     Serial.print("1052");
+  //     break;
+  //   case INA228_TIME_2074_us:
+  //     Serial.print("2074");
+  //     break;
+  //   case INA228_TIME_4120_us:
+  //     Serial.print("4120");
+  //     break;
+  //   }
+  //   Serial.println(" uS");
 
-    ina228.setCurrentConversionTime(INA228_TIME_280_us);
-    Serial.print("Current conversion time: ");
-    switch (ina228.getCurrentConversionTime())
-    {
-    case INA228_TIME_50_us:
-      Serial.print("50");
-      break;
-    case INA228_TIME_84_us:
-      Serial.print("84");
-      break;
-    case INA228_TIME_150_us:
-      Serial.print("150");
-      break;
-    case INA228_TIME_280_us:
-      Serial.print("280");
-      break;
-    case INA228_TIME_540_us:
-      Serial.print("540");
-      break;
-    case INA228_TIME_1052_us:
-      Serial.print("1052");
-      break;
-    case INA228_TIME_2074_us:
-      Serial.print("2074");
-      break;
-    case INA228_TIME_4120_us:
-      Serial.print("4120");
-      break;
-    }
-    Serial.println(" uS");
-  }
+  //   ina228.setCurrentConversionTime(INA228_TIME_280_us);
+  //   Serial.print("Current conversion time: ");
+  //   switch (ina228.getCurrentConversionTime())
+  //   {
+  //   case INA228_TIME_50_us:
+  //     Serial.print("50");
+  //     break;
+  //   case INA228_TIME_84_us:
+  //     Serial.print("84");
+  //     break;
+  //   case INA228_TIME_150_us:
+  //     Serial.print("150");
+  //     break;
+  //   case INA228_TIME_280_us:
+  //     Serial.print("280");
+  //     break;
+  //   case INA228_TIME_540_us:
+  //     Serial.print("540");
+  //     break;
+  //   case INA228_TIME_1052_us:
+  //     Serial.print("1052");
+  //     break;
+  //   case INA228_TIME_2074_us:
+  //     Serial.print("2074");
+  //     break;
+  //   case INA228_TIME_4120_us:
+  //     Serial.print("4120");
+  //     break;
+  //   }
+  //   Serial.println(" uS");
+  // }
 
   ui_init(); // Initialize UI generated by Square Line
   setupDisplayTimer();
@@ -249,36 +327,49 @@ void loop()
     }
   }
 
-  if (updateLabels)
+  if (beep_now)
   {
-    updateLabels = false;
-    char voltage_str[8];
-    char power_str[8];
-    char current_str[8];
-    char max_current_str[8];
-    char max_power_str[8];
-    char max_busvoltage_str[8];
-    char capacity_str[8];
-    char temp_str[8];
-
-    snprintf(voltage_str, sizeof(voltage_str), "%.2f", busvoltage);
-    snprintf(power_str, sizeof(power_str), "%.2f", power_mW / 1000.0);
-    snprintf(current_str, sizeof(current_str), "%.0f", current_mA);
-    snprintf(max_current_str, sizeof(max_current_str), "%.0f", max_current_mA);
-    snprintf(max_power_str, sizeof(max_power_str), "%.1f", max_power_mW / 1000.0);
-    snprintf(max_busvoltage_str, sizeof(max_busvoltage_str), "%.1f", max_busvoltage);
-    snprintf(capacity_str, sizeof(capacity_str), "%.1f", capacity);
-    snprintf(temp_str, sizeof(temp_str), "%.1f", temp);
-
-    lv_label_set_text(ui_Label_Voltage, voltage_str);
-    lv_label_set_text(ui_Label_Power, power_str);
-    lv_label_set_text(ui_Label_Current, current_str);
-    lv_label_set_text(ui_Label_Capacity, capacity_str);
-    lv_label_set_text(ui_Label_Max_current, max_current_str);
-    lv_label_set_text(ui_Label_Max_Power, max_power_str);
-    lv_label_set_text(ui_Label_Max_Voltage, max_busvoltage_str);
-    lv_label_set_text(ui_Label_Temperature, temp_str);
+    beep_now = false;
+    M5.Speaker.tone(5000, 10, 1, true, wavdata, sizeof(wavdata));
   }
+
+  // static uint32_t last_analog_read = 0;
+  // if (millis() - last_analog_read >= 100)
+  // {
+  //   int analog_value = analogRead(HALL_ANALOG);
+  //   Serial.printf("Analog value: %d\n", analog_value);
+  //   last_analog_read = millis();
+  // }
+  // if (updateLabels)
+  // {
+  //   updateLabels = false;
+  //   char voltage_str[8];
+  //   char power_str[8];
+  //   char current_str[8];
+  //   char max_current_str[8];
+  //   char max_power_str[8];
+  //   char max_busvoltage_str[8];
+  //   char capacity_str[8];
+  //   char temp_str[8];
+
+  //   snprintf(voltage_str, sizeof(voltage_str), "%.2f", busvoltage);
+  //   snprintf(power_str, sizeof(power_str), "%.2f", power_mW / 1000.0);
+  //   snprintf(current_str, sizeof(current_str), "%.0f", current_mA);
+  //   snprintf(max_current_str, sizeof(max_current_str), "%.0f", max_current_mA);
+  //   snprintf(max_power_str, sizeof(max_power_str), "%.1f", max_power_mW / 1000.0);
+  //   snprintf(max_busvoltage_str, sizeof(max_busvoltage_str), "%.1f", max_busvoltage);
+  //   snprintf(capacity_str, sizeof(capacity_str), "%.1f", capacity);
+  //   snprintf(temp_str, sizeof(temp_str), "%.1f", temp);
+
+  //   lv_label_set_text(ui_Label_Voltage, voltage_str);
+  //   lv_label_set_text(ui_Label_Power, power_str);
+  //   lv_label_set_text(ui_Label_Current, current_str);
+  //   lv_label_set_text(ui_Label_Capacity, capacity_str);
+  //   lv_label_set_text(ui_Label_Max_current, max_current_str);
+  //   lv_label_set_text(ui_Label_Max_Power, max_power_str);
+  //   lv_label_set_text(ui_Label_Max_Voltage, max_busvoltage_str);
+  //   lv_label_set_text(ui_Label_Temperature, temp_str);
+  // }
 
   if (is_dimmed)
   {

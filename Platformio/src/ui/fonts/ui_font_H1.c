@@ -4,7 +4,7 @@
  * Opts: --bpp 2 --size 32 --font /Users/karelfunda/Projects/Core2-LVGL-SquareStudio-BatteryMonitor/SquareStudio/assets/fonts/Nexa Light.otf -o /Users/karelfunda/Projects/Core2-LVGL-SquareStudio-BatteryMonitor/SquareStudio/assets/fonts/ui_font_H1.c --format lvgl -r 0x20-0x7f --no-compress --no-prefilter
  ******************************************************************************/
 
-#include "ui.h"
+#include "../ui.h"
 
 #ifndef UI_FONT_H1
 #define UI_FONT_H1 1
